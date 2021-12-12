@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">DataConsumption</string>
+    <string name="byte_unit">B</string>
+    <string name="kilobyte_unit">KB</string>
+    <string name="megabyte_unit">MB</string>
+    <string name="gigabyte_unit">GB</string>
+    <string name="terabyte_unit">TB</string>
+</resources>
