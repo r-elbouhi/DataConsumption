@@ -8,6 +8,7 @@ import android.net.ConnectivityManager
 import android.os.RemoteException
 import android.telephony.TelephonyManager
 import com.rami.dataConsumption.model.PackageData
+import java.util.*
 
 /**
  * Created by Rami El-bouhi on 09,December,2021
@@ -21,21 +22,22 @@ class NetworkStatsHelper constructor(private val context: Context) {
         val packagesData = PackageManagerHelper.getPackagesData(context)
         val subscribeId = getSubscriberId(ConnectivityManager.TYPE_MOBILE)
         for (packageData in packagesData) {
-            packageData.bytes = getPackageMobileBytes(packageData.uid ?: 0, subscribeId)
+            packageData.bytes =
+                getPackageMobileBytes(packageData.uid ?: 0, subscribeId, getStartTime())
         }
         // remove zero consuming
-        packagesData.removeAll { it.bytes?:0L == 0L }
+        packagesData.removeAll { it.bytes ?: 0L == 0L }
         // sort by usage
         packagesData.sortByDescending { it.bytes }
         return packagesData
     }
 
-    private fun getPackageMobileBytes(uid: Int, subscriberId:String?): Long {
+    private fun getPackageMobileBytes(uid: Int, subscriberId: String?, startTime: Long): Long {
         val networkStats: NetworkStats? = try {
             networkStatsManager.queryDetailsForUid(
                 ConnectivityManager.TYPE_MOBILE,
                 subscriberId,
-                0,
+                startTime,
                 System.currentTimeMillis(),
                 uid
             )
@@ -60,5 +62,16 @@ class NetworkStatsHelper constructor(private val context: Context) {
             return tm.subscriberId
         }
         return ""
+    }
+
+    private fun getStartTime(): Long {
+        // first day of the current month?
+        val cal: Calendar = Calendar.getInstance()
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.clear(Calendar.MINUTE)
+        cal.clear(Calendar.SECOND)
+        cal.clear(Calendar.MILLISECOND)
+        cal.set(Calendar.DAY_OF_MONTH, 1)
+        return cal.timeInMillis
     }
 }

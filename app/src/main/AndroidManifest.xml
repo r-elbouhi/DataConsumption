@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DataConsumption">
         <activity
-            android:name="com.rami.dataConsumption.model.MainActivity"
+            android:name="com.rami.dataConsumption.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

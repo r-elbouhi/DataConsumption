@@ -1,4 +1,4 @@
-package com.rami.dataConsumption.model
+package com.rami.dataConsumption.ui
 
 import android.Manifest
 import android.app.AppOpsManager
@@ -11,12 +11,14 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Process
 import android.provider.Settings
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.rami.dataConsumption.PackageAdapter
 import com.rami.dataConsumption.R
+import com.rami.dataConsumption.model.PackageData
 import com.rami.dataConsumption.utils.NetworkStatsHelper
 import java.util.concurrent.Executors
 
@@ -98,6 +100,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateUi(packagesData: List<PackageData>?) {
+        if (packagesData.isNullOrEmpty()){
+            Toast.makeText(this, "Empty list", Toast.LENGTH_SHORT).show()
+        }
         packageAdapter.submitList(packagesData)
     }
 
